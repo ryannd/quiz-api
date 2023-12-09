@@ -12,7 +12,11 @@ export const getSpotifyPlaylist = async (
     const playlist = await spotifyApi.playlists.getPlaylist(playlistId);
     const filteredTracks = playlist.tracks.items.map((item) => {
         const track = item.track;
-        if ("preview_url" in track && track.preview_url !== "") {
+        if (
+            "preview_url" in track &&
+            track.preview_url !== "" &&
+            track.preview_url !== null
+        ) {
             const artists = track.artists.map((artist) => ({
                 id: artist.id,
                 name: artist.name,
@@ -24,7 +28,7 @@ export const getSpotifyPlaylist = async (
             };
             const id = track.id;
             const name = track.name;
-            const preview = track.preview_url ?? "";
+            const preview = track.preview_url;
 
             return {
                 artists,
