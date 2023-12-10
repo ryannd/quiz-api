@@ -8,7 +8,7 @@ const spotifyApi = SpotifyApi.withClientCredentials(
 
 export const getSpotifyPlaylist = async (
     playlistId: string,
-): Promise<SpotifyPlaylist> => {
+): Promise<SpotifyPlaylist | undefined> => {
     const playlist = await spotifyApi.playlists.getPlaylist(playlistId);
     const filteredTracks = playlist.tracks.items.map((item) => {
         const track = item.track;
