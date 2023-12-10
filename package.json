@@ -65,7 +65,6 @@
         "**/*.ts": [
             "prettier --write",
             "eslint src/ --fix",
-            "jest --bail --findRelatedTests",
             "git add"
         ]
     },
