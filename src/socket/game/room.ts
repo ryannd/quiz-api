@@ -9,8 +9,8 @@ export default class Room {
     players: string[] = [];
 
     constructor(host: string) {
-        this.game = new Game();
         this.id = generateRoomCode();
+        this.game = new Game(this.id);
         this.host = host;
     }
 
@@ -35,6 +35,10 @@ export default class Room {
     }
 
     addPlayersToGame() {
+        if (!this.game) {
+            return;
+        }
+
         for (const player of this.players) {
             // TODO: after support for user obj, pass in name
             this.game.players[player] = new Player(player, "");

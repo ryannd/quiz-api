@@ -16,5 +16,22 @@ export default class Player {
 
     updateAnswer(answer: string) {
         this.answer = answer;
+        return this.answer;
+    }
+
+    getId() {
+        return this.id;
+    }
+
+    getName() {
+        return this.name;
+    }
+
+    getAnswer() {
+        return this.answer;
+    }
+
+    getScore() {
+        return this.score;
     }
 }

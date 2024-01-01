@@ -1,18 +1,36 @@
 import { Server } from "socket.io";
-import { createServer } from "http";
-import Koa from "koa";
+import { Server as HttpServerType } from "http";
+import { IncomingMessage, ServerResponse } from "http";
+import { DefaultEventsMap } from "socket.io/dist/typed-events";
+import Game from "./game/game";
 
-export default function initSocket(
-    app: Koa<Koa.DefaultState, Koa.DefaultContext>,
-) {
-    const httpServer = createServer(app.callback());
-    const io = new Server(httpServer, {
-        path: "/socket",
-    });
+class Socket {
+    io:
+        | Server<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap>
+        | undefined;
 
-    io.on("connection", (socket) => {
-        console.log(socket.id);
-    });
+    constructor() {}
 
-    return httpServer;
+    init(
+        httpServer: HttpServerType<
+            typeof IncomingMessage,
+            typeof ServerResponse
+        >,
+    ) {
+        this.io = new Server(httpServer, {
+            path: "/socket",
+        });
+
+        this.io.on("connection", (socket) => {
+            socket.join("test");
+            const game = new Game("test");
+            game.timer(5);
+        });
+    }
+
+    getIo() {
+        return this.io;
+    }
 }
+
+export default new Socket();

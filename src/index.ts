@@ -5,11 +5,14 @@ import bodyParser from "koa-bodyparser";
 import "dotenv/config";
 
 import { router as spotifyRouter } from "./routes/spotify.route";
-import initSocket from "./socket";
+import { createServer } from "http";
+import io from "./socket";
 
 const app = new Koa();
 const PORT = process.env.PORT || 8000;
-const httpServer = initSocket(app);
+const httpServer = createServer(app.callback());
+
+io.init(httpServer);
 
 app.use(logger());
 app.use(json());
