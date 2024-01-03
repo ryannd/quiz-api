@@ -3,10 +3,12 @@ export default class Player {
     name: string;
     score: number = 0;
     answer: string = "";
+    room: string = "";
 
-    constructor(id: string, name: string) {
+    constructor(id: string, name: string, room: string) {
         this.id = id;
         this.name = name;
+        this.room = room;
     }
 
     updateScore(wasAnswerCorrect: boolean) {

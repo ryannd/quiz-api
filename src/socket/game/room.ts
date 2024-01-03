@@ -1,21 +1,29 @@
-import generateRoomCode from "../helpers/generateRoomCode";
+import { getSpotifyPlaylist } from "../../services/spotify.service";
+import { SpotifyPlaylist } from "../../types/spotify.types";
 import Game from "./game";
 import Player from "./player";
 
 export default class Room {
-    game: Game;
+    game: Game | undefined;
     id: string;
-    host: string;
+    hostId: string;
     players: string[] = [];
+    playlist: SpotifyPlaylist | undefined;
 
     constructor(host: string) {
-        this.id = generateRoomCode();
-        this.game = new Game(this.id);
-        this.host = host;
+        this.id = Room.generateRoomCode();
+        this.hostId = host;
     }
 
     startGame() {
-        this.addPlayersToGame();
+        if (!this.playlist) {
+            return;
+        }
+
+        const newGame = new Game(this.id, this.playlist);
+        this.game = newGame;
+        this.addPlayersToGame(newGame);
+        this.game.startGame();
     }
 
     playerConnect(id: string) {
@@ -31,17 +39,23 @@ export default class Room {
             this.players.splice(indexOfPlayer, 1);
         }
 
+        delete this.game?.players[id];
+
         return this.players;
     }
 
-    addPlayersToGame() {
-        if (!this.game) {
-            return;
-        }
-
+    addPlayersToGame(game: Game) {
         for (const player of this.players) {
             // TODO: after support for user obj, pass in name
-            this.game.players[player] = new Player(player, "");
+            game.players[player] = new Player(player, "", this.id);
         }
+    }
+
+    async changePlaylist(playlistId: string) {
+        this.playlist = await getSpotifyPlaylist(playlistId);
+    }
+
+    static generateRoomCode() {
+        return Math.random().toString(36).substring(2, 7);
     }
 }
