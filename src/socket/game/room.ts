@@ -39,7 +39,9 @@ export default class Room {
             this.players.splice(indexOfPlayer, 1);
         }
 
-        delete this.game?.players[id];
+        if (this.game) {
+            this.game.removePlayer(id);
+        }
 
         return this.players;
     }
