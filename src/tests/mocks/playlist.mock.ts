@@ -1,3 +1,5 @@
+import { SpotifyPlaylist } from "../../types/spotify.types";
+
 export const mockPlaylist = {
     collaborative: false,
     description:
@@ -554,4 +556,218 @@ export const mockPlaylistType = {
             url: expect.any(String),
         }),
     ]),
+};
+
+export const mockSpotifyPlaylist: SpotifyPlaylist = {
+    tracks: [
+        {
+            artists: [
+                {
+                    id: "0M3eRYg8ULjCtLFvhc5Orb",
+                    name: "WJSN THE BLACK",
+                },
+            ],
+            album: {
+                id: "1RR97BqW9TH7t0vV4T9JcG",
+                images: [
+                    {
+                        height: 640,
+                        url: "https://i.scdn.co/image/ab67616d0000b27334a05859b4935468f9d8b810",
+                        width: 640,
+                    },
+                    {
+                        height: 300,
+                        url: "https://i.scdn.co/image/ab67616d00001e0234a05859b4935468f9d8b810",
+                        width: 300,
+                    },
+                    {
+                        height: 64,
+                        url: "https://i.scdn.co/image/ab67616d0000485134a05859b4935468f9d8b810",
+                        width: 64,
+                    },
+                ],
+                name: "My attitude",
+            },
+            id: "3KLkc1h39HhbuXIYB5xgAq",
+            name: "Easy",
+            preview:
+                "https://p.scdn.co/mp3-preview/bc8ed22f750be627a0432f190f6f38b5b9b3a9b5?cid=42caabdb96854a0ab5f49b409115a245",
+            image: {
+                height: 640,
+                url: "https://i.scdn.co/image/ab67616d0000b27334a05859b4935468f9d8b810",
+                width: 640,
+            },
+        },
+        {
+            artists: [
+                {
+                    id: "1z4g3DjTBBZKhvAroFlhOM",
+                    name: "Red Velvet",
+                },
+            ],
+            album: {
+                id: "3HgoCO9wWuPcNhz8Ip4C46",
+                images: [
+                    {
+                        height: 640,
+                        url: "https://i.scdn.co/image/ab67616d0000b2738c4a282e84a53c1c8acf129a",
+                        width: 640,
+                    },
+                    {
+                        height: 300,
+                        url: "https://i.scdn.co/image/ab67616d00001e028c4a282e84a53c1c8acf129a",
+                        width: 300,
+                    },
+                    {
+                        height: 64,
+                        url: "https://i.scdn.co/image/ab67616d000048518c4a282e84a53c1c8acf129a",
+                        width: 64,
+                    },
+                ],
+                name: "‘The ReVe Festival 2022 - Feel My Rhythm’",
+            },
+            id: "6Zr6W8j3jJ3z50XsBCvm3e",
+            name: "Beg For Me",
+            preview:
+                "https://p.scdn.co/mp3-preview/c0cb356d1ca603c906ee07dc705ceba87e972e01?cid=42caabdb96854a0ab5f49b409115a245",
+            image: {
+                height: 640,
+                url: "https://i.scdn.co/image/ab67616d0000b2738c4a282e84a53c1c8acf129a",
+                width: 640,
+            },
+        },
+        {
+            artists: [
+                {
+                    id: "0LOK81e9H5lr61HlGGHqwA",
+                    name: "XG",
+                },
+            ],
+            album: {
+                id: "1Gi6ij4Jxc4qE35i3I0gqS",
+                images: [
+                    {
+                        height: 640,
+                        url: "https://i.scdn.co/image/ab67616d0000b2733f40fd20e67b865fca5391a3",
+                        width: 640,
+                    },
+                    {
+                        height: 300,
+                        url: "https://i.scdn.co/image/ab67616d00001e023f40fd20e67b865fca5391a3",
+                        width: 300,
+                    },
+                    {
+                        height: 64,
+                        url: "https://i.scdn.co/image/ab67616d000048513f40fd20e67b865fca5391a3",
+                        width: 64,
+                    },
+                ],
+                name: "SHOOTING STAR",
+            },
+            id: "3v5o91PrUtf0nmO6j8J7dZ",
+            name: "LEFT RIGHT",
+            preview:
+                "https://p.scdn.co/mp3-preview/a821c8bbf4706683dd234bf9e3c394010bce5dcc?cid=42caabdb96854a0ab5f49b409115a245",
+            image: {
+                height: 640,
+                url: "https://i.scdn.co/image/ab67616d0000b2733f40fd20e67b865fca5391a3",
+                width: 640,
+            },
+        },
+        {
+            artists: [
+                {
+                    id: "3U7bOaJLuFkrmDQ1C1OqKl",
+                    name: "HYO",
+                },
+            ],
+            album: {
+                id: "2qa6E3bEJ5OqwVgbfWOeF4",
+                images: [
+                    {
+                        height: 640,
+                        url: "https://i.scdn.co/image/ab67616d0000b273da5d3cc4b932b0e51723ab01",
+                        width: 640,
+                    },
+                    {
+                        height: 300,
+                        url: "https://i.scdn.co/image/ab67616d00001e02da5d3cc4b932b0e51723ab01",
+                        width: 300,
+                    },
+                    {
+                        height: 64,
+                        url: "https://i.scdn.co/image/ab67616d00004851da5d3cc4b932b0e51723ab01",
+                        width: 64,
+                    },
+                ],
+                name: "DEEP - The 1st Mini Album",
+            },
+            id: "2afNmSvxjRvXw3Fqm9qWfK",
+            name: "DEEP",
+            preview:
+                "https://p.scdn.co/mp3-preview/b46945ba8e4a0279954348b1061b80057558b20c?cid=42caabdb96854a0ab5f49b409115a245",
+            image: {
+                height: 640,
+                url: "https://i.scdn.co/image/ab67616d0000b273da5d3cc4b932b0e51723ab01",
+                width: 640,
+            },
+        },
+        {
+            artists: [
+                {
+                    id: "7n2Ycct7Beij7Dj7meI4X0",
+                    name: "TWICE",
+                },
+            ],
+            album: {
+                id: "5052Ip89wdW8EGdpjEpNeq",
+                images: [
+                    {
+                        height: 640,
+                        url: "https://i.scdn.co/image/ab67616d0000b273d1961ecb307c9e05ec8f7e82",
+                        width: 640,
+                    },
+                    {
+                        height: 300,
+                        url: "https://i.scdn.co/image/ab67616d00001e02d1961ecb307c9e05ec8f7e82",
+                        width: 300,
+                    },
+                    {
+                        height: 64,
+                        url: "https://i.scdn.co/image/ab67616d00004851d1961ecb307c9e05ec8f7e82",
+                        width: 64,
+                    },
+                ],
+                name: "Formula of Love: O+T=<3",
+            },
+            id: "1bXM8imxd31qCecbHgSk9E",
+            name: "HELLO (NAYEON, MOMO, CHAEYOUNG)",
+            preview:
+                "https://p.scdn.co/mp3-preview/d36a87870c78ead3fe3331040aa182a787d1e493?cid=42caabdb96854a0ab5f49b409115a245",
+            image: {
+                height: 640,
+                url: "https://i.scdn.co/image/ab67616d0000b273d1961ecb307c9e05ec8f7e82",
+                width: 640,
+            },
+        },
+    ],
+    href: "https://api.spotify.com/v1/playlists/6qKxtHrlvX2twMXEhjMzM5",
+    description: "xg&#x2F;gidle -- workout or shake some ass",
+    images: [
+        {
+            height: 640,
+            url: "https://mosaic.scdn.co/640/ab67616d0000b27334a05859b4935468f9d8b810ab67616d0000b2733f40fd20e67b865fca5391a3ab67616d0000b2738c4a282e84a53c1c8acf129aab67616d0000b273900d10b8f74cbac991333789",
+            width: 640,
+        },
+        {
+            height: 300,
+            url: "https://mosaic.scdn.co/300/ab67616d0000b27334a05859b4935468f9d8b810ab67616d0000b2733f40fd20e67b865fca5391a3ab67616d0000b2738c4a282e84a53c1c8acf129aab67616d0000b273900d10b8f74cbac991333789",
+            width: 300,
+        },
+        {
+            height: 60,
+            url: "https://mosaic.scdn.co/60/ab67616d0000b27334a05859b4935468f9d8b810ab67616d0000b2733f40fd20e67b865fca5391a3ab67616d0000b2738c4a282e84a53c1c8acf129aab67616d0000b273900d10b8f74cbac991333789",
+            width: 60,
+        },
+    ],
 };

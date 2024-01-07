@@ -20,20 +20,4 @@ export default class Player {
         this.answer = answer;
         return this.answer;
     }
-
-    getId() {
-        return this.id;
-    }
-
-    getName() {
-        return this.name;
-    }
-
-    getAnswer() {
-        return this.answer;
-    }
-
-    getScore() {
-        return this.score;
-    }
 }

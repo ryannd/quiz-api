@@ -47,7 +47,8 @@ export default class Room {
     addPlayersToGame(game: Game) {
         for (const player of this.players) {
             // TODO: after support for user obj, pass in name
-            game.players[player] = new Player(player, "", this.id);
+            const newPlayer = new Player(player, "", this.id);
+            game.addPlayer(newPlayer);
         }
     }
 

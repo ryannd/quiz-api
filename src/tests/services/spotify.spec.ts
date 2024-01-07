@@ -1,9 +1,9 @@
-import { mockPlaylist, mockPlaylistType } from "./mocks/playlist.mock";
+import { mockPlaylist, mockPlaylistType } from "../mocks/playlist.mock";
 import { SpotifyApi } from "@spotify/web-api-ts-sdk";
-import * as spotifyService from "../services/spotify.service";
-import { SpotifyPlaylist } from "../types/spotify.types";
+import * as spotifyService from "../../services/spotify.service";
+import { SpotifyPlaylist } from "../../types/spotify.types";
 import { createMockContext } from "@shopify/jest-koa-mocks";
-import { getPlaylist } from "../controllers/spotify.controller";
+import { getPlaylist } from "../../controllers/spotify.controller";
 
 jest.mock("@spotify/web-api-ts-sdk", () => {
     return {

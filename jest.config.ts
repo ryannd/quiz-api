@@ -4,6 +4,7 @@ export default {
     collectCoverageFrom: [
         "src/controllers/*.ts",
         "src/services/*.ts",
+        "src/socket/**/*.ts",
         "!**/node_modules/**",
         "!**/build/**",
         "!**/coverage/**",
@@ -11,7 +12,6 @@ export default {
     transform: {
         "\\.ts$": "ts-jest",
     },
-    coverageReporters: ["text", "text-summary"],
     testRegex: "(/tests/|(\\.|/)(test|spec))\\.(js|ts)x?$",
     testPathIgnorePatterns: ["/node_modules/", "/build/", "/coverage/"],
 };

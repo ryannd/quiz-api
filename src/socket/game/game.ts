@@ -32,11 +32,8 @@ export default class Game {
         );
 
         this.currentTrack = this.playlist.tracks[randomTrackIndex];
-
         this.emitEvent("game:roundStart", this.currentTrack);
-
         this.playlist.tracks.splice(randomTrackIndex, 1);
-
         this.currentRound++;
 
         this.timer(20, () => this.endRound());
@@ -54,18 +51,7 @@ export default class Game {
         this.timer(5, () => this.startRound());
     }
 
-    resetPlayerState() {
-        for (const player in this.players) {
-            this.players[player].updateAnswer("");
-        }
-    }
-
-    removePlayer(playerId: string) {
-        delete this.players[playerId];
-    }
-
     endGame() {
-        console.log("game end");
         let winner;
         let winnerScore = 0;
         for (const player in this.players) {
@@ -82,9 +68,21 @@ export default class Game {
         return winner;
     }
 
-    // todo: standardize type
-    // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-    timer(seconds: number, callback: () => any) {
+    resetPlayerState() {
+        for (const player in this.players) {
+            this.players[player].updateAnswer("");
+        }
+    }
+
+    addPlayer(player: Player) {
+        this.players[player.id] = player;
+    }
+
+    removePlayer(playerId: string) {
+        delete this.players[playerId];
+    }
+
+    timer(seconds: number, callback: () => void) {
         let secondsLeft = seconds;
         const timer = setInterval(() => {
             this.tick(secondsLeft);
