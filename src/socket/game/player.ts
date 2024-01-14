@@ -4,6 +4,7 @@ export default class Player {
     score: number = 0;
     answer: string = "";
     room: string = "";
+    ready: boolean = false;
 
     constructor(id: string, name: string, room: string) {
         this.id = id;
@@ -19,5 +20,9 @@ export default class Player {
     updateAnswer(answer: string) {
         this.answer = answer;
         return this.answer;
+    }
+
+    onReady() {
+        this.ready = true;
     }
 }

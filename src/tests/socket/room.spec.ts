@@ -21,10 +21,6 @@ describe("Room", () => {
     });
 
     describe("startGame", () => {
-        beforeAll(() => {
-            room.playerConnect("test");
-        });
-
         it("should throw when starting game without a playlist", () => {
             expect(() => {
                 room.startGame();
@@ -35,39 +31,77 @@ describe("Room", () => {
             jest.spyOn(spotifyService, "getSpotifyPlaylist").mockResolvedValue(
                 mockSpotifyPlaylist,
             );
-            const addPlayerSpy = jest.spyOn(room, "addPlayersToGame");
 
             await room.changePlaylist("test");
 
             room.startGame();
 
             expect(room.game).toBeTruthy();
-            expect(addPlayerSpy).toHaveBeenCalledWith(room.game);
         });
     });
 
     describe("playerConnect", () => {
         it("should add player to player list", () => {
-            room.playerConnect("tester");
-            expect(room.players).toContain("tester");
+            room.playerConnect("tester", "test");
+            expect(room.players).toMatchObject({
+                tester: {
+                    answer: "",
+                    id: "tester",
+                    name: "test",
+                    room: room.id,
+                    score: 0,
+                },
+            });
         });
         it("should throw if player already in room", () => {
             expect(() => {
-                room.playerConnect("tester");
-            }).toThrow("player already in room");
+                room.playerConnect("tester", "test");
+            }).toThrow(`player already exists in room ${room.id}`);
         });
     });
 
     describe("playerDisconnect", () => {
         it("should remove player from player list", () => {
             room.playerDisconnect("tester");
-            expect(room.players).not.toContain("tester");
+            expect(room.players).not.toContain({
+                tester: {
+                    answer: "",
+                    id: "tester",
+                    name: "test",
+                    room: room.id,
+                    score: 0,
+                },
+            });
         });
 
         it("should throw if player not in room", () => {
             expect(() => {
                 room.playerDisconnect("tester");
             }).toThrow("player not in room");
+        });
+    });
+
+    describe("playerReady", () => {
+        room.playerConnect("tester1", "test");
+        const player = room.players["tester1"];
+
+        afterEach(() => {
+            jest.clearAllMocks();
+        });
+
+        it("should ready player", () => {
+            const readySpy = jest.spyOn(player, "onReady");
+            room.playerReady("tester1");
+
+            expect(readySpy).toHaveBeenCalled();
+            expect(player.ready).toBe(true);
+        });
+
+        it("should not call when player already ready", () => {
+            const readySpy = jest.spyOn(player, "onReady");
+            room.playerReady("tester1");
+
+            expect(readySpy).not.toHaveBeenCalled();
         });
     });
 });

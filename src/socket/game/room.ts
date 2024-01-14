@@ -2,13 +2,15 @@ import { getSpotifyPlaylist } from "../../services/spotify.service";
 import { SpotifyPlaylist } from "../../types/spotify.types";
 import Game from "./game";
 import Player from "./player";
+import io from "..";
 
 export default class Room {
     game: Game | undefined;
     id: string;
     hostId: string;
-    players: string[] = [];
+    players: { [id: string]: Player } = {};
     playlist: SpotifyPlaylist | undefined;
+    numReady: number = 0;
 
     constructor(host: string) {
         this.id = Room.generateRoomCode();
@@ -20,31 +22,25 @@ export default class Room {
             throw new Error(`playlist not selected in room ${this.id}`);
         }
 
-        const newGame = new Game(this.id, this.playlist);
+        const newGame = new Game(this.id, this.playlist, this.players);
         this.game = newGame;
-        this.addPlayersToGame(newGame);
         this.game.startGame();
     }
 
-    playerConnect(id: string) {
-        if (this.players.includes(id)) {
-            throw new Error("player already in room");
+    playerConnect(id: string, name: string) {
+        if (this.players[id] !== undefined) {
+            throw new Error(`player already exists in room ${this.id}`);
         }
 
-        // TODO: add support for user obj
-        this.players.push(id);
-        return this.players;
+        const newPlayer = new Player(id, name, this.id);
+        this.players[id] = newPlayer;
     }
 
     playerDisconnect(id: string) {
-        const indexOfPlayer = this.players.indexOf(id);
+        const player = this.players[id];
 
-        if (indexOfPlayer > -1) {
-            this.players.splice(indexOfPlayer, 1);
-
-            if (this.game) {
-                this.game.removePlayer(id);
-            }
+        if (player) {
+            delete this.players[id];
         } else {
             throw new Error("player not in room");
         }
@@ -52,11 +48,13 @@ export default class Room {
         return this.players;
     }
 
-    addPlayersToGame(game: Game) {
-        for (const player of this.players) {
-            // TODO: after support for user obj, pass in name
-            const newPlayer = new Player(player, "", this.id);
-            game.addPlayer(newPlayer);
+    playerReady(id: string) {
+        const player = this.players[id];
+
+        if (!player.ready) {
+            player.onReady();
+            this.numReady++;
+            this.emitEvent("room:playerReady", { playerId: id });
         }
     }
 
@@ -66,5 +64,11 @@ export default class Room {
 
     static generateRoomCode() {
         return Math.random().toString(36).substring(2, 7);
+    }
+
+    // todo: standardize type
+    // eslint-disable-next-line  @typescript-eslint/no-explicit-any
+    emitEvent(eventString: string, data: any = {}) {
+        io.getIo()?.in(this.id).emit(eventString, data);
     }
 }

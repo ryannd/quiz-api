@@ -3,8 +3,15 @@ import { Server as HttpServerType } from "http";
 import { IncomingMessage, ServerResponse } from "http";
 import { DefaultEventsMap } from "socket.io/dist/typed-events";
 import Room from "./game/room";
-import Player from "./game/player";
-import { onPlayerJoin } from "./events/listeners";
+import {
+    onPlayerJoin,
+    onCreateRoom,
+    onGameStart,
+    onPlayerLeave,
+    onPlaylistChange,
+    onAnswerChange,
+    onPlayerReady,
+} from "./events/listeners";
 
 class Socket {
     io:
@@ -12,7 +19,7 @@ class Socket {
         | undefined;
 
     rooms: { [key: string]: Room } = {};
-    players: { [key: string]: Player } = {};
+    players: { [key: string]: string } = {};
 
     constructor() {}
 
@@ -26,12 +33,25 @@ class Socket {
             path: "/socket",
         });
 
-        // todo: remove test code
-        this.io.on("connection", async (socket) => {
-            const room = onPlayerJoin(socket.id);
-            socket.join(room.id);
-            await room.changePlaylist("4PLDHWXGiXcgbQOa1FuebT");
-            room.startGame();
+        this.initEvents();
+    }
+
+    initEvents() {
+        this.io?.on("connection", (socket) => {
+            socket.on("socket:join", (data) => {
+                const room = onPlayerJoin(socket.id, data);
+                socket.join(room.id);
+            });
+            socket.on("socket:createRoom", () => onCreateRoom(socket.id));
+            socket.on("room:gameStart", () => onGameStart(socket.id));
+            socket.on("disconnect", () => onPlayerLeave(socket.id));
+            socket.on("room:playlistChange", (data) =>
+                onPlaylistChange(socket.id, data),
+            );
+            socket.on("game:answerChange", (data) =>
+                onAnswerChange(socket.id, data),
+            );
+            socket.on("room:playerReady", () => onPlayerReady(socket.id));
         });
     }
 

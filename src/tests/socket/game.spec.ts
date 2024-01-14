@@ -1,9 +1,13 @@
 import Game from "../../socket/game/game";
-import Player from "../../socket/game/player";
+import Room from "../../socket/game/room";
 import { mockSpotifyPlaylist } from "../mocks/playlist.mock";
 
 describe("Game", () => {
-    const game = new Game("test", mockSpotifyPlaylist);
+    const room = new Room("test");
+    room.playerConnect("test", "test");
+    room.playerConnect("test1", "test");
+
+    const game = new Game("test", mockSpotifyPlaylist, room.players);
     jest.useFakeTimers();
 
     afterEach(() => {
@@ -64,9 +68,8 @@ describe("Game", () => {
         });
 
         it("should update player answer", () => {
-            const player = new Player("test", "test", "test");
+            const player = game.players["test"];
             const updateAnswerSpy = jest.spyOn(player, "updateScore");
-            game.addPlayer(player);
             game.endRound();
             expect(updateAnswerSpy).toHaveBeenCalled();
         });
@@ -74,10 +77,7 @@ describe("Game", () => {
 
     describe("endGame", () => {
         it("should pick winner", () => {
-            const player1 = new Player("test1", "test", "test");
-            const player2 = new Player("test", "test", "test");
-            game.addPlayer(player1);
-            game.addPlayer(player2);
+            const player2 = game.players["test1"];
             player2.score = 99999;
             const winner = game.endGame();
             expect(winner).toBe(player2.id);
@@ -99,21 +99,6 @@ describe("Game", () => {
             for (const player in game.players) {
                 expect(game.players[player].answer).toBe("");
             }
-        });
-    });
-
-    describe("addPlayer", () => {
-        it("should add a player", () => {
-            const newPlayer = new Player("test2", "test", "test");
-            game.addPlayer(newPlayer);
-            expect(game.players[newPlayer.id]).toEqual(newPlayer);
-        });
-    });
-
-    describe("removePlayer", () => {
-        it("should remove a player", () => {
-            game.removePlayer("test2");
-            expect(game.players["test2"]).toBe(undefined);
         });
     });
 

@@ -1,19 +1,24 @@
 import { SpotifyPlaylist, SpotifyTrack } from "../../types/spotify.types";
-import Player from "./player";
 import io from "..";
+import Player from "./player";
 
 export default class Game {
-    players: { [id: string]: Player } = {};
     gameMode: string = "default";
     rounds: number = 10;
     currentRound: number = 1;
     playlist: SpotifyPlaylist;
     currentTrack: SpotifyTrack | undefined;
     roomId: string = "";
+    players: { [id: string]: Player };
 
-    constructor(roomId: string, playlist: SpotifyPlaylist) {
+    constructor(
+        roomId: string,
+        playlist: SpotifyPlaylist,
+        players: { [id: string]: Player },
+    ) {
         this.roomId = roomId;
         this.playlist = playlist;
+        this.players = players;
     }
 
     startGame() {
@@ -44,9 +49,12 @@ export default class Game {
 
         for (const player in this.players) {
             const wasAnswerCorrect =
-                this.currentTrack?.name === this.players[player].answer;
+                this.currentTrack?.name.toLowerCase() ===
+                this.players[player].answer.toLowerCase();
             this.players[player].updateScore(wasAnswerCorrect);
         }
+
+        this.resetPlayerState();
 
         this.timer(5, () => this.startRound());
     }
@@ -72,14 +80,6 @@ export default class Game {
         for (const player in this.players) {
             this.players[player].updateAnswer("");
         }
-    }
-
-    addPlayer(player: Player) {
-        this.players[player.id] = player;
-    }
-
-    removePlayer(playerId: string) {
-        delete this.players[playerId];
     }
 
     timer(seconds: number, callback: () => void) {
