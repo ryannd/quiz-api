@@ -17,7 +17,7 @@ export default class Room {
 
     startGame() {
         if (!this.playlist) {
-            return;
+            throw new Error(`playlist not selected in room ${this.id}`);
         }
 
         const newGame = new Game(this.id, this.playlist);
@@ -27,6 +27,10 @@ export default class Room {
     }
 
     playerConnect(id: string) {
+        if (this.players.includes(id)) {
+            throw new Error("player already in room");
+        }
+
         // TODO: add support for user obj
         this.players.push(id);
         return this.players;
@@ -37,10 +41,12 @@ export default class Room {
 
         if (indexOfPlayer > -1) {
             this.players.splice(indexOfPlayer, 1);
-        }
 
-        if (this.game) {
-            this.game.removePlayer(id);
+            if (this.game) {
+                this.game.removePlayer(id);
+            }
+        } else {
+            throw new Error("player not in room");
         }
 
         return this.players;
