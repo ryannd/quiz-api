@@ -56,9 +56,15 @@ export const onGameStart = (playerId: string) => {
         return;
     }
 
-    room.startGame();
+    try {
+        room.startGame();
 
-    console.log(`[SOCKET]: Room: ${room.id} started their game!`);
+        console.log(`[SOCKET]: Room: ${room.id} started their game!`);
+    } catch {
+        console.log(
+            `[ERROR] Room: ${room.id} had an error starting their game`,
+        );
+    }
 };
 
 export const onPlaylistChange = async (
