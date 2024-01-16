@@ -51,7 +51,13 @@ class Socket {
             });
             socket.on("socket:createRoom", () => onCreateRoom(socket.id));
             socket.on("room:gameStart", () => onGameStart(socket.id));
-            socket.on("disconnect", () => onPlayerLeave(socket.id));
+            socket.on("disconnect", () => {
+                try {
+                    onPlayerLeave(socket.id);
+                } catch (e) {
+                    console.error(e);
+                }
+            });
             socket.on("room:playlistChange", (data) =>
                 onPlaylistChange(socket.id, data),
             );
