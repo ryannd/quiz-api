@@ -39,8 +39,15 @@ class Socket {
     initEvents() {
         this.io?.on("connection", (socket) => {
             socket.on("socket:join", (data) => {
-                const room = onPlayerJoin(socket.id, data);
-                socket.join(room.id);
+                try {
+                    const room = onPlayerJoin(socket.id, data);
+
+                    if (room) {
+                        socket.join(room.id);
+                    }
+                } catch (e) {
+                    console.error(e);
+                }
             });
             socket.on("socket:createRoom", () => onCreateRoom(socket.id));
             socket.on("room:gameStart", () => onGameStart(socket.id));

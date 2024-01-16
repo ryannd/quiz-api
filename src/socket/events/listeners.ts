@@ -15,7 +15,7 @@ export const onPlayerJoin = (
     playerId: string,
     { roomId = "", name = "" }: { roomId: string; name: string },
 ) => {
-    let room = io.rooms[roomId];
+    const room = io.rooms[roomId];
     const playerExists = io.players[playerId];
 
     if (playerExists) {
@@ -23,7 +23,9 @@ export const onPlayerJoin = (
     }
 
     if (room === undefined || roomId === "") {
-        room = onCreateRoom(playerId);
+        throw new Error(
+            `[ERROR] Joining failed. Room: ${roomId} does not exist!`,
+        );
     }
 
     io.players[playerId] = room.id;
@@ -40,12 +42,19 @@ export const onPlayerLeave = (playerId: string) => {
     const room = io.rooms[roomId];
 
     if (!room || !roomId) {
-        return;
+        throw new Error(
+            `[ERROR] Leaving failed. Player ${playerId} is not in a room!`,
+        );
     }
 
+    delete io.players[playerId];
     room.playerDisconnect(playerId);
 
     console.log(`[SOCKET]: Player ${playerId} left room ${room.id}!`);
+
+    if (Object.entries(room.players).length === 0) {
+        delete io.rooms[roomId];
+    }
 };
 
 export const onGameStart = (playerId: string) => {
@@ -53,15 +62,16 @@ export const onGameStart = (playerId: string) => {
     const room = io.rooms[roomId];
 
     if (!room) {
-        return;
+        throw new Error(
+            `[ERROR] Game start failed. Player ${playerId} is not in a room!`,
+        );
     }
 
     try {
         room.startGame();
-
         console.log(`[SOCKET]: Room: ${room.id} started their game!`);
     } catch {
-        console.log(
+        throw new Error(
             `[ERROR] Room: ${room.id} had an error starting their game`,
         );
     }
@@ -75,7 +85,7 @@ export const onPlaylistChange = async (
     const room = io.rooms[roomId];
 
     if (!room || playlistId === "") {
-        return;
+        throw new Error(`[ERROR] Playlist change failed`);
     }
 
     await room.changePlaylist(playlistId);
@@ -91,10 +101,14 @@ export const onAnswerChange = (
 ) => {
     const roomId = io.players[playerId];
     const room = io.rooms[roomId];
-    const playerObj = room.game?.players[playerId];
+    const playerObj = room ? room.game?.players[playerId] : null;
 
     if (playerObj) {
         playerObj.updateAnswer(answer);
+    } else {
+        throw new Error(
+            `[ERROR] Answer change failed. Player ${playerId} does not exist!`,
+        );
     }
 };
 
@@ -104,5 +118,9 @@ export const onPlayerReady = (playerId: string) => {
 
     if (room) {
         room.playerReady(playerId);
+    } else {
+        throw new Error(
+            `[ERROR] Player ready failed. Player ${playerId} is not in a room!`,
+        );
     }
 };

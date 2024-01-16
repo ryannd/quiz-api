@@ -25,6 +25,8 @@ export default class Room {
         const newGame = new Game(this.id, this.playlist, this.players);
         this.game = newGame;
         this.game.startGame();
+
+        return this.game;
     }
 
     playerConnect(id: string, name: string) {
@@ -51,10 +53,14 @@ export default class Room {
     playerReady(id: string) {
         const player = this.players[id];
 
-        if (!player.ready) {
+        if (player && !player.ready) {
             player.onReady();
             this.numReady++;
             this.emitEvent("room:playerReady", { playerId: id });
+        }
+
+        if (!player) {
+            throw new Error("player not in room");
         }
     }
 
