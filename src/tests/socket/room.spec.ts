@@ -103,5 +103,11 @@ describe("Room", () => {
 
             expect(readySpy).not.toHaveBeenCalled();
         });
+
+        it("should throw if player not in room", () => {
+            expect(() => {
+                room.playerReady("nope");
+            }).toThrow("player not in room");
+        });
     });
 });
