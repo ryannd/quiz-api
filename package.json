@@ -6,13 +6,15 @@
     "scripts": {
         "build": "tsc",
         "serve": "ts-node src/index.ts",
-        "start": "nodemon",
+        "dev": "nodemon",
         "prepare": "husky install",
         "prettier:check": "npx prettier --check .",
         "prettier:fix": "npx prettier --write .",
         "lint": "npx eslint .",
         "test": "jest",
-        "test:cov": "jest --coverage"
+        "test:cov": "jest --coverage",
+        "docker:build": "docker-compose build",
+        "docker:dev": "docker-compose up"
     },
     "keywords": [],
     "author": "",

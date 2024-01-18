@@ -45,8 +45,10 @@ class Socket {
                     if (room) {
                         socket.join(room.id);
                     }
-                } catch (e) {
-                    console.error(e);
+                } catch (e: unknown) {
+                    if (e instanceof Error) {
+                        console.error(e.message);
+                    }
                 }
             });
             socket.on("socket:createRoom", () => onCreateRoom(socket.id));
@@ -54,8 +56,10 @@ class Socket {
             socket.on("disconnect", () => {
                 try {
                     onPlayerLeave(socket.id);
-                } catch (e) {
-                    console.error(e);
+                } catch (e: unknown) {
+                    if (e instanceof Error) {
+                        console.error(e.message);
+                    }
                 }
             });
             socket.on("room:playlistChange", (data) =>
