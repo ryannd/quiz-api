@@ -1,16 +1,16 @@
 name: Clean up after CI
 
 on:
-  delete:
-    branches-ignore:
-      - main
+    delete:
+        branches-ignore:
+            - main
 
 jobs:
-  delete:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: strumwolf/delete-deployment-environment@v2
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          environment: test
-          onlyRemoveDeployments: true
+    delete:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: strumwolf/delete-deployment-environment@v2
+              with:
+                  token: ${{ secrets.GITHUB_TOKEN }}
+                  environment: test
+                  onlyRemoveDeployments: true

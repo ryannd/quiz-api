@@ -1,17 +1,7 @@
-export type SpotifyPlaylist = {
-    tracks: (SpotifyTrack | undefined)[];
-    href: string;
-    description: string;
-    images: SpotifyImage[];
-};
-
-export type SpotifyTrack = {
-    artists: SpotifyArtist[];
-    album: SpotifyAlbum;
-    id: string;
-    name: string;
-    preview: string;
-    image: SpotifyImage;
+export type SpotifyImage = {
+    width: number | null;
+    height: number | null;
+    url: string;
 };
 
 export type SpotifyArtist = {
@@ -25,8 +15,18 @@ export type SpotifyAlbum = {
     name: string;
 };
 
-export type SpotifyImage = {
-    width: number | null;
-    height: number | null;
-    url: string;
+export type SpotifyTrack = {
+    artists: SpotifyArtist[];
+    album: SpotifyAlbum;
+    id: string;
+    name: string;
+    preview: string;
+    image: SpotifyImage;
+};
+
+export type SpotifyPlaylist = {
+    tracks: (SpotifyTrack | undefined)[];
+    href: string;
+    description: string;
+    images: SpotifyImage[];
 };

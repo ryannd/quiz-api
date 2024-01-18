@@ -4,6 +4,7 @@ import * as spotifyService from "../../services/spotify.service";
 import { SpotifyPlaylist } from "../../types/spotify.types";
 import { createMockContext } from "@shopify/jest-koa-mocks";
 import { getPlaylist } from "../../controllers/spotify.controller";
+import { RouterContext } from "koa-router";
 
 jest.mock("@spotify/web-api-ts-sdk", () => {
     return {
@@ -27,12 +28,10 @@ describe("SpotifyService", () => {
         });
 
         it("should throw if spotify call fails", () => {
-            spotifyApi.playlists.getPlaylist = jest
-                .fn()
-                .mockRejectedValueOnce({});
-            expect(async () => {
+            spotifyApi.playlists.getPlaylist = jest.fn().mockRejectedValue({});
+            return expect(async () => {
                 await spotifyService.getSpotifyPlaylist("testid");
-            }).rejects;
+            }).rejects.toThrow();
         });
 
         it("should process the playlist correctly", async () => {
@@ -44,10 +43,12 @@ describe("SpotifyService", () => {
         });
 
         it("should use the spotify api to get a playlist", async () => {
-            await spotifyService.getSpotifyPlaylist("testid");
-            expect(spotifyApi.playlists.getPlaylist).toHaveBeenCalledWith(
-                "testid",
+            const getPlaylistSpy = jest.spyOn(
+                spotifyApi.playlists,
+                "getPlaylist",
             );
+            await spotifyService.getSpotifyPlaylist("testid");
+            expect(getPlaylistSpy).toHaveBeenCalledWith("testid");
         });
     });
 });
@@ -55,7 +56,9 @@ describe("SpotifyService", () => {
 describe("SpotifyController", () => {
     describe("getPlaylist", () => {
         it("throws if no playlist id", async () => {
-            const ctx = createMockContext();
+            const ctx = createMockContext({
+                customProperties: { params: { id: "" } },
+            }) as RouterContext;
             await getPlaylist(ctx);
             expect(ctx.throw).toHaveBeenCalledWith(400, {
                 error: { code: 400, message: "INVALID_ROUTE_OPTIONS" },
@@ -66,7 +69,7 @@ describe("SpotifyController", () => {
             const getSpy = jest.spyOn(spotifyService, "getSpotifyPlaylist");
             const ctx = createMockContext({
                 customProperties: { params: { id: "12345" } },
-            });
+            }) as RouterContext;
             await getPlaylist(ctx);
             expect(getSpy).toHaveBeenCalledWith("12345");
         });
@@ -77,7 +80,7 @@ describe("SpotifyController", () => {
             );
             const ctx = createMockContext({
                 customProperties: { params: { id: "12345" } },
-            });
+            }) as RouterContext;
             await getPlaylist(ctx);
             expect(ctx.throw).toHaveBeenCalledWith(400, {
                 error: { code: 400, message: "INVALID_DATA" },

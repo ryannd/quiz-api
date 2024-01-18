@@ -1,8 +1,8 @@
-import Koa from "koa";
 import { getSpotifyPlaylist } from "../services/spotify.service";
+import Router from "koa-router";
 
-export const getPlaylist = async (ctx: Koa.Context) => {
-    const playlistId = ctx.params?.id;
+export const getPlaylist = async (ctx: Router.RouterContext) => {
+    const playlistId: string = ctx.params.id;
 
     if (!playlistId) {
         ctx.throw(400, {

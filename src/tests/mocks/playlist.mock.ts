@@ -519,7 +519,7 @@ export const mockPlaylist = {
     uri: "spotify:playlist:37i9dQZF1DXdTb8AG95jne",
 };
 
-export const mockPlaylistType = {
+export const mockPlaylistType: any = {
     tracks: expect.arrayContaining([
         {
             artists: expect.arrayContaining([

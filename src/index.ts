@@ -10,6 +10,7 @@ import io from "./socket";
 
 const app = new Koa();
 const PORT = process.env.PORT || 8000;
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
 const httpServer = createServer(app.callback());
 
 io.init(httpServer);

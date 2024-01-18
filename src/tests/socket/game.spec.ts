@@ -1,3 +1,5 @@
+/* eslint-env jest */
+
 import Game from "../../socket/game/game";
 import Room from "../../socket/game/room";
 import { mockSpotifyPlaylist } from "../mocks/playlist.mock";
@@ -34,7 +36,7 @@ describe("Game", () => {
         it("should remove a track from playlist", () => {
             const startingPlaylistLength = game.playlist.tracks.length;
             game.startRound();
-            expect(game.playlist.tracks.length).toBe(
+            expect(game.playlist.tracks).toHaveLength(
                 startingPlaylistLength - 1,
             );
         });
@@ -68,7 +70,7 @@ describe("Game", () => {
         });
 
         it("should update player answer", () => {
-            const player = game.players["test"];
+            const player = game.players.test;
             const updateAnswerSpy = jest.spyOn(player, "updateScore");
             game.endRound();
             expect(updateAnswerSpy).toHaveBeenCalled();
@@ -77,7 +79,7 @@ describe("Game", () => {
 
     describe("endGame", () => {
         it("should pick winner", () => {
-            const player2 = game.players["test1"];
+            const player2 = game.players.test1;
             player2.score = 99999;
             const winner = game.endGame();
             expect(winner).toBe(player2.id);

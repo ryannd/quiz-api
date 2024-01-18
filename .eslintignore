@@ -1,0 +1,4 @@
+*.cjs
+coverage
+jest.config.ts
+src/tests/mocks

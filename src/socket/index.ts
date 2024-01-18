@@ -1,6 +1,9 @@
 import { Server } from "socket.io";
-import { Server as HttpServerType } from "http";
-import { IncomingMessage, ServerResponse } from "http";
+import {
+    IncomingMessage,
+    ServerResponse,
+    Server as HttpServerType,
+} from "http";
 import { DefaultEventsMap } from "socket.io/dist/typed-events";
 import Room from "./game/room";
 import {
@@ -21,8 +24,6 @@ class Socket {
     rooms: { [key: string]: Room } = {};
     players: { [key: string]: string } = {};
 
-    constructor() {}
-
     init(
         httpServer: HttpServerType<
             typeof IncomingMessage,
@@ -38,19 +39,22 @@ class Socket {
 
     initEvents() {
         this.io?.on("connection", (socket) => {
-            socket.on("socket:join", (data) => {
-                try {
-                    const room = onPlayerJoin(socket.id, data);
+            socket.on(
+                "socket:join",
+                async (data: { roomId: string; name: string }) => {
+                    try {
+                        const room = onPlayerJoin(socket.id, data);
 
-                    if (room) {
-                        socket.join(room.id);
+                        if (room) {
+                            await socket.join(room.id);
+                        }
+                    } catch (e: unknown) {
+                        if (e instanceof Error) {
+                            console.error(e.message);
+                        }
                     }
-                } catch (e: unknown) {
-                    if (e instanceof Error) {
-                        console.error(e.message);
-                    }
-                }
-            });
+                },
+            );
             socket.on("socket:createRoom", () => onCreateRoom(socket.id));
             socket.on("room:gameStart", () => onGameStart(socket.id));
             socket.on("disconnect", () => {
@@ -62,10 +66,10 @@ class Socket {
                     }
                 }
             });
-            socket.on("room:playlistChange", (data) =>
+            socket.on("room:playlistChange", (data: { playlistId: string }) =>
                 onPlaylistChange(socket.id, data),
             );
-            socket.on("game:answerChange", (data) =>
+            socket.on("game:answerChange", (data: { answer: string }) =>
                 onAnswerChange(socket.id, data),
             );
             socket.on("room:playerReady", () => onPlayerReady(socket.id));

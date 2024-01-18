@@ -1,14 +1,14 @@
 version: "3"
 
 services:
-  quiz-api:
-    image: quiz-api
-    build: .
-    environment:
-      NODE_ENV: development
-    ports:
-      - 5000:5000
-    command: yarn dev
-    volumes:
-      - .:/api
-      - /quiz-api/node_modules
+    quiz-api:
+        image: quiz-api
+        build: .
+        environment:
+            NODE_ENV: development
+        ports:
+            - 5000:5000
+        command: yarn dev
+        volumes:
+            - .:/api
+            - /quiz-api/node_modules

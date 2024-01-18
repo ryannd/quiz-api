@@ -45,7 +45,7 @@ describe("Event Listeners", () => {
             onPlayerJoin("tester", { roomId: globalRoom.id, name: "tester" });
 
             expect(connectSpy).toHaveBeenCalled();
-            expect(io.players["tester"]).toBeTruthy();
+            expect(io.players.tester).toBeTruthy();
         });
 
         it("should not add existing player to room", () => {
@@ -74,8 +74,8 @@ describe("Event Listeners", () => {
 
         it("should remove player from room", () => {
             onPlayerLeave("player");
-            expect(io.players["player"]).toBeFalsy();
-            expect(globalRoom.players["player"]).toBeFalsy();
+            expect(io.players.player).toBeFalsy();
+            expect(globalRoom.players.player).toBeFalsy();
         });
 
         it("should delete room if room is empty", () => {
@@ -88,7 +88,7 @@ describe("Event Listeners", () => {
         beforeEach(() => {
             jest.resetAllMocks();
         });
-        it("should throw if player not in room ", () => {
+        it("should throw if player not in room", () => {
             expect(() => {
                 onGameStart("nope");
             }).toThrow(
@@ -126,13 +126,13 @@ describe("Event Listeners", () => {
         });
 
         it("should throw if player not in room", () => {
-            expect(async () => {
+            return expect(async () => {
                 await onPlaylistChange("player", { playlistId: "test" });
             }).rejects.toThrow(`[ERROR] Playlist change failed`);
         });
 
         it("should throw if playlistid is empty or null", () => {
-            expect(async () => {
+            return expect(async () => {
                 await onPlaylistChange("tester", { playlistId: "" });
             }).rejects.toThrow(`[ERROR] Playlist change failed`);
         });
@@ -147,10 +147,7 @@ describe("Event Listeners", () => {
             globalRoom.playlist = mockSpotifyPlaylist;
             const game = globalRoom.startGame();
 
-            const updateSpy = jest.spyOn(
-                game.players["tester"],
-                "updateAnswer",
-            );
+            const updateSpy = jest.spyOn(game.players.tester, "updateAnswer");
             onAnswerChange("tester", { answer: "testing" });
 
             expect(updateSpy).toHaveBeenCalledWith("testing");

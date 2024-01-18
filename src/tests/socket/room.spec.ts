@@ -83,7 +83,7 @@ describe("Room", () => {
 
     describe("playerReady", () => {
         room.playerConnect("tester1", "test");
-        const player = room.players["tester1"];
+        const player = room.players.tester1;
 
         afterEach(() => {
             jest.clearAllMocks();
