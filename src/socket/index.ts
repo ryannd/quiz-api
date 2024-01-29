@@ -16,6 +16,7 @@ import {
     onPlayerReady,
 } from "./events/listeners";
 import emitEvent from "./util/emitEvent";
+import { ClientRoom } from "../types/client.types";
 
 class Socket {
     io:
@@ -51,8 +52,15 @@ class Socket {
                         const room = onPlayerJoin(socket.id, data);
 
                         if (room) {
+                            const sanitizedRoom: ClientRoom = {
+                                id: room.id,
+                                players: room.players,
+                                hostId: room.hostId,
+                                playlist: room.playlist,
+                            };
+
                             await socket.join(room.id);
-                            emitEvent(room.id, "room:update", room);
+                            emitEvent(room.id, "room:update", sanitizedRoom);
                         }
                     } catch (e: unknown) {
                         if (e instanceof Error) {
