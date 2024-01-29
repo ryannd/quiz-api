@@ -2,7 +2,7 @@ import { getSpotifyPlaylist } from "../../services/spotify.service";
 import { SpotifyPlaylist } from "../../types/spotify.types";
 import Game from "./game";
 import Player from "./player";
-import io from "..";
+import emitEvent from "../util/emitEvent";
 
 export default class Room {
     game: Game | undefined;
@@ -56,7 +56,7 @@ export default class Room {
         if (player && !player.ready) {
             player.onReady();
             this.numReady++;
-            this.emitEvent("room:playerReady", { playerId: id });
+            emitEvent(this.id, "room:playerReady", { playerId: id });
         }
 
         if (!player) {
@@ -66,11 +66,5 @@ export default class Room {
 
     async changePlaylist(playlistId: string) {
         this.playlist = await getSpotifyPlaylist(playlistId);
-    }
-
-    // todo: standardize type
-    // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-    emitEvent(eventString: string, data: any = {}) {
-        io.getIo()?.in(this.id).emit(eventString, data);
     }
 }

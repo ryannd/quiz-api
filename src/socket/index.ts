@@ -15,6 +15,7 @@ import {
     onAnswerChange,
     onPlayerReady,
 } from "./events/listeners";
+import emitEvent from "./util/emitEvent";
 
 class Socket {
     io:
@@ -51,6 +52,7 @@ class Socket {
 
                         if (room) {
                             await socket.join(room.id);
+                            emitEvent(room.id, "room:update", room);
                         }
                     } catch (e: unknown) {
                         if (e instanceof Error) {

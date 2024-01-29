@@ -3,6 +3,7 @@
 import Game from "../../socket/game/game";
 import Room from "../../socket/game/room";
 import { mockSpotifyPlaylist } from "../mocks/playlist.mock";
+import * as emitEvent from "../../socket/util/emitEvent";
 
 describe("Game", () => {
     const room = new Room("test", "test");
@@ -24,10 +25,13 @@ describe("Game", () => {
 
     describe("startGame", () => {
         it("should call emit event, timer and start round", () => {
-            const emitEventSpy = jest.spyOn(game, "emitEvent");
+            const emitEventSpy = jest.spyOn(emitEvent, "default");
             const timerSpy = jest.spyOn(game, "timer");
             game.startGame();
-            expect(emitEventSpy).toHaveBeenCalledWith("game:start");
+            expect(emitEventSpy).toHaveBeenCalledWith(
+                game.roomId,
+                "game:start",
+            );
             expect(timerSpy).toHaveBeenCalledWith(5, expect.any(Function));
         });
     });
@@ -42,10 +46,11 @@ describe("Game", () => {
         });
 
         it("should call emit event and timer", () => {
-            const emitEventSpy = jest.spyOn(game, "emitEvent");
+            const emitEventSpy = jest.spyOn(emitEvent, "default");
             const timerSpy = jest.spyOn(game, "timer");
             game.startRound();
             expect(emitEventSpy).toHaveBeenCalledWith(
+                "test",
                 "game:roundStart",
                 expect.anything(),
             );
@@ -62,10 +67,13 @@ describe("Game", () => {
 
     describe("endRound", () => {
         it("should call emit event and timer", () => {
-            const emitEventSpy = jest.spyOn(game, "emitEvent");
+            const emitEventSpy = jest.spyOn(emitEvent, "default");
             const timerSpy = jest.spyOn(game, "timer");
             game.endRound();
-            expect(emitEventSpy).toHaveBeenCalledWith("game:roundEnd");
+            expect(emitEventSpy).toHaveBeenCalledWith(
+                game.roomId,
+                "game:roundEnd",
+            );
             expect(timerSpy).toHaveBeenCalledWith(5, expect.any(Function));
         });
 
@@ -86,7 +94,7 @@ describe("Game", () => {
         });
 
         it("should call emitEvent", () => {
-            const emitEventSpy = jest.spyOn(game, "emitEvent");
+            const emitEventSpy = jest.spyOn(emitEvent, "default");
             game.endGame();
             expect(emitEventSpy).toHaveBeenCalled();
         });
@@ -108,7 +116,7 @@ describe("Game", () => {
         it("should countdown and invoke callback function", () => {
             const callback = jest.fn();
             const tickSpy = jest.spyOn(game, "tick");
-            const emitEventSpy = jest.spyOn(game, "emitEvent");
+            const emitEventSpy = jest.spyOn(emitEvent, "default");
             game.timer(2, callback);
 
             jest.advanceTimersByTime(3000);
@@ -116,7 +124,10 @@ describe("Game", () => {
             expect(tickSpy).toHaveBeenCalledWith(2);
             expect(tickSpy).toHaveBeenCalledWith(1);
 
-            expect(emitEventSpy).toHaveBeenCalledWith("game:timerDone");
+            expect(emitEventSpy).toHaveBeenCalledWith(
+                game.roomId,
+                "game:timerDone",
+            );
 
             expect(callback).toHaveBeenCalled();
         });

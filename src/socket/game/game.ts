@@ -1,6 +1,6 @@
 import { SpotifyPlaylist, SpotifyTrack } from "../../types/spotify.types";
-import io from "..";
 import Player from "./player";
+import emitEvent from "../util/emitEvent";
 
 export default class Game {
     gameMode: string = "default";
@@ -22,7 +22,7 @@ export default class Game {
     }
 
     startGame() {
-        this.emitEvent("game:start");
+        emitEvent(this.roomId, "game:start");
         this.timer(5, () => this.startRound());
     }
 
@@ -37,7 +37,7 @@ export default class Game {
         );
 
         this.currentTrack = this.playlist.tracks[randomTrackIndex];
-        this.emitEvent("game:roundStart", this.currentTrack);
+        emitEvent(this.roomId, "game:roundStart", this.currentTrack);
         this.playlist.tracks.splice(randomTrackIndex, 1);
         this.currentRound++;
 
@@ -45,7 +45,7 @@ export default class Game {
     }
 
     endRound() {
-        this.emitEvent("game:roundEnd");
+        emitEvent(this.roomId, "game:roundEnd");
 
         for (const player in this.players) {
             const wasAnswerCorrect =
@@ -71,7 +71,7 @@ export default class Game {
             }
         }
 
-        this.emitEvent("game:end");
+        emitEvent(this.roomId, "game:end");
 
         return winner;
     }
@@ -88,7 +88,7 @@ export default class Game {
             this.tick(secondsLeft);
             if (secondsLeft === 0) {
                 clearInterval(timer);
-                this.emitEvent("game:timerDone");
+                emitEvent(this.roomId, "game:timerDone");
                 callback();
             }
             secondsLeft--;
@@ -96,12 +96,6 @@ export default class Game {
     }
 
     tick(secondsLeft: number) {
-        this.emitEvent("game:tick", secondsLeft);
-    }
-
-    // todo: standardize type
-    // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-    emitEvent(eventString: string, data: any = {}) {
-        io.getIo()?.in(this.roomId).emit(eventString, data);
+        emitEvent(this.roomId, "game:tick", secondsLeft);
     }
 }
