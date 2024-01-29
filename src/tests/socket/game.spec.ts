@@ -5,7 +5,7 @@ import Room from "../../socket/game/room";
 import { mockSpotifyPlaylist } from "../mocks/playlist.mock";
 
 describe("Game", () => {
-    const room = new Room("test");
+    const room = new Room("test", "test");
     room.playerConnect("test", "test");
     room.playerConnect("test1", "test");
 

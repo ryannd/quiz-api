@@ -18,7 +18,7 @@ describe("Event Listeners", () => {
         jest.clearAllTimers();
     });
 
-    const globalRoom = onCreateRoom("test");
+    const globalRoom = onCreateRoom("test", "test");
 
     describe("onCreateRoom", () => {
         it("should create a room", () => {
@@ -31,12 +31,6 @@ describe("Event Listeners", () => {
     });
 
     describe("onPlayerJoin", () => {
-        it("should throw if room does not exist", () => {
-            expect(() => {
-                onPlayerJoin("tester", { roomId: "1", name: "tester" });
-            }).toThrow(`[ERROR] Joining failed. Room: 1 does not exist!`);
-        });
-
         it("should add player to room", () => {
             const connectSpy = jest.spyOn(
                 io.rooms[globalRoom.id],
@@ -63,7 +57,7 @@ describe("Event Listeners", () => {
     });
 
     describe("onPlayerLeave", () => {
-        const newRoom = onCreateRoom("player");
+        const newRoom = onCreateRoom("player", "tester");
         onPlayerJoin("player", { roomId: newRoom.id, name: "player" });
 
         it("should throw if player is not in a room", () => {

@@ -1,12 +1,11 @@
 import io from "..";
 import Room from "../game/room";
 
-export const onCreateRoom = (hostId: string) => {
-    const room = new Room(hostId);
-    const roomId = room.id;
-    io.rooms[roomId] = room;
+export const onCreateRoom = (hostId: string, id: string) => {
+    const room = new Room(hostId, id);
+    io.rooms[id] = room;
 
-    console.log(`[SOCKET]: Room: ${room.id} created!`);
+    console.log(`[SOCKET]: Room: ${id} created!`);
 
     return room;
 };
@@ -15,7 +14,7 @@ export const onPlayerJoin = (
     playerId: string,
     { roomId = "", name = "" }: { roomId: string; name: string },
 ) => {
-    const room = io.rooms[roomId];
+    let room = io.rooms[roomId];
     const playerExists = io.players[playerId];
 
     if (playerExists) {
@@ -23,9 +22,7 @@ export const onPlayerJoin = (
     }
 
     if (room === undefined || roomId === "") {
-        throw new Error(
-            `[ERROR] Joining failed. Room: ${roomId} does not exist!`,
-        );
+        room = onCreateRoom(playerId, roomId);
     }
 
     io.players[playerId] = room.id;

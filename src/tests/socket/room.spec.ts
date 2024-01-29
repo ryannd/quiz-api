@@ -5,7 +5,7 @@ import { mockSpotifyPlaylist } from "../mocks/playlist.mock";
 jest.mock("../../services/spotify.service");
 
 describe("Room", () => {
-    const room = new Room("test");
+    const room = new Room("test", "test");
 
     beforeAll(() => {
         jest.useFakeTimers();

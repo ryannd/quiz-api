@@ -32,6 +32,10 @@ class Socket {
     ) {
         this.io = new Server(httpServer, {
             path: "/socket",
+            cors: {
+                origin: "http://localhost:3000",
+                methods: ["GET", "POST"],
+            },
         });
 
         this.initEvents();
@@ -55,7 +59,9 @@ class Socket {
                     }
                 },
             );
-            socket.on("socket:createRoom", () => onCreateRoom(socket.id));
+            socket.on("socket:createRoom", (data: { roomId: string }) =>
+                onCreateRoom(socket.id, data.roomId),
+            );
             socket.on("room:gameStart", () => onGameStart(socket.id));
             socket.on("disconnect", () => {
                 try {

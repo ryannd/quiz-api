@@ -12,9 +12,9 @@ export default class Room {
     playlist: SpotifyPlaylist | undefined;
     numReady: number = 0;
 
-    constructor(host: string) {
-        this.id = Room.generateRoomCode();
+    constructor(host: string, id: string) {
         this.hostId = host;
+        this.id = id;
     }
 
     startGame() {
@@ -66,10 +66,6 @@ export default class Room {
 
     async changePlaylist(playlistId: string) {
         this.playlist = await getSpotifyPlaylist(playlistId);
-    }
-
-    static generateRoomCode() {
-        return Math.random().toString(36).substring(2, 7);
     }
 
     // todo: standardize type
